@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      body {
+        font-family: "Segoe UI", sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* 固定ヘッダー */
+      .header {
+        position: sticky;
+        top: 0;
+        background: #f5f5f5;
+        padding: 8px 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #ccc;
+        z-index: 10;
+      }
+
+      .title {
+        font-size: 16px;
+        font-weight: bold;
+        margin: 0;
+      }
+
+      .buttons {
+        display: flex;
+        gap: 8px;
+      }
+
+      button {
+        padding: 6px 12px;
+        font-size: 13px;
+        cursor: pointer;
+      }
+
+      /* エディタ全体 */
+      .editor-container {
+        display: flex;
+        height: calc(100vh - 60px);
+      }
+
+      /* 行番号 */
+      .line-numbers {
+        width: 50px;
+        background: #eee;
+        padding: 8px 4px;
+        text-align: right;
+        font-family: monospace;
+        font-size: 13px;
+        overflow: hidden;
+        border-right: 1px solid #ccc;
+        box-sizing: border-box;
+      }
+
+      /*　テキストエリア */
+      textarea {
+        flex: 1;
+        font-family: monospace;
+        font-size: 13px;
+        padding: 8px;
+        border: none;
+        outline: none;
+        resize: none;
+        overflow: auto;
+        box-sizing: border-box;
+        white-space: pre;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <!-- 固定ヘッダー -->
+    <div class="header">
+      <div class="title">dictionary.json</div>
+
+      <div class="buttons">
+        <button onclick="save()">保存</button>
+        <button onclick="google.script.host.close()">キャンセル</button>
+      </div>
+    </div>
+
+    <!-- エディタ本体 -->
+    <div class="editor-container">
+      <div id="lineNumbers" class="line-numbers"></div>
+      <textarea id="jsonArea" oninput="updateLines()" onscroll="syncScroll()"><?= jsonText ?></textarea>
+    </div>
+
+    <script>
+      function updateLines() {
+        const text = document.getElementById('jsonArea').value;
+        const lines = text.split('\n').length;
+        let html = '';
+        for (let i = 1; i <= lines; i++) html += i + '<br>';
+        document.getElementById('lineNumbers').innerHTML = html;
+      }
+
+      function syncScroll() {
+        const ta = document.getElementById('jsonArea');
+        document.getElementById('lineNumbers').scrollTop = ta.scrollTop;
+      }
+
+      window.onload = updateLines;
+
+      function save() {
+        const newJson = document.getElementById('jsonArea').value;
+
+        google.script.run
+          .withSuccessHandler(function(result) {
+            if (result.success) {
+              alert('保存しました。');
+              google.script.host.close();
+            } else {
+              alert(result.message);
+            }
+          })
+          .saveJson(newJson);
+      }
+    </script>
+
+  </body>
+</html>
