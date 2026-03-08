@@ -1,6 +1,6 @@
 # スプレッドシート上で動くJSONファイルを使った入力補正ツール
 
-![画面例](docs/screenshot1.png)
+![画面例](doc/screenshot1.png)
 
 ## 概要
 - 水泳選手の次回大会の出場競技を管理するスプレッドシートです。
@@ -10,9 +10,9 @@
 ## 主な機能
 - ワイルドカードによる変換対象語句の検索
 - 変換対象語句の一括置き換え
-  ![画面例](docs/screenshot2.png)
+  ![画面例](doc/screenshot2.png)
 - JSONエディタによるJSONファイルの編集
-  ![画面例](docs/screenshot3.png)
+  ![画面例](doc/screenshot3.png)
   
 ## 技術ポイント
 - JSONファイルの読み書き、バックアップ作成
